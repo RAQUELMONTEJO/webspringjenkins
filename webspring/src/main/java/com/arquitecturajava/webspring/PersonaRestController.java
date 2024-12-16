@@ -7,19 +7,23 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.aquitecturajava.webspring.dtos.PersonaDto;
+import com.arquitecturajava.spring.models.Persona;
+import com.arquitecturajava.webspring.mappers.PersonaMapper;
+
 @RestController
 @RequestMapping("/personas")
 public class PersonaRestController {
 	@Autowired
 	private PersonaService servicio;
 
-	public void add(Persona persona) {
-		servicio.add(persona);
+	public void add(PersonaDto personaDto) {
+		servicio.add(PersonaMapper.toBo(personaDto));
 	}
 
 	@GetMapping
-	public List<Persona> buscarTodos() {
-		return servicio.buscarTodos();
+	public List<PersonaDto> buscarTodos() {
+		return servicio.buscarTodos().stream().map((p)->new PersonaDto(p.getNombre())).toList();
 	}
 	
 }
